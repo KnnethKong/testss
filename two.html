@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+</head>
+<script type="text/javascript" src="js/qr.js"></script>
+<body>
+	<canvas id="myCanvas" width="720" height="500"
+		style="border: 1px solid #d3d3d3; background: #ffffff; position: absolute; z-index: 1;"></canvas>
+
+	<button onclick="download()" style="margin-top: 600px;">下 载</button>
+	<script type="text/javascript">
+		var canvas = document.getElementById('myCanvas');
+		var ctx = canvas.getContext('2d');
+		var img = new Image();
+		var deskname = "你哥的号桌";
+		img.src = "js/hehe2.png";
+		img.onload = function() {
+			ctx.drawImage(img, 0, 0, 710, 490);
+			ctx.fillStyle = '#fff';
+			ctx.fillRect(400, 30, 200, 50);
+			ctx.font = "30px Courier New";
+			ctx.fillStyle = "#000";
+			ctx.fillText(deskname, 440, 80);
+			QR.canvas = canvas
+			QR.draw('http://merchant.vikpay.com/')
+			QR.size = 100
+		}
+
+		function download() {
+
+			var canvas2 = document.getElementsByTagName('canvas')[0];
+			//设置保存图片的类型
+			var imgdata = canvas2.toDataURL();
+			//将mime-type改为image/octet-stream,强制让浏览器下载
+			var fixtype = function(type) {
+				type = type.toLocaleLowerCase().replace(/jpg/i, 'jpeg');
+				var r = type.match(/png|jpeg|bmp|gif/)[0];
+				return 'image/' + r;
+			}
+			imgdata = imgdata.replace(fixtype("png"), 'image/octet-stream')
+			//将图片保存到本地
+			var saveFile = function(data, filename) {
+				var link = document.createElement('a');
+				link.href = data;
+				link.download = filename;
+				var event = document.createEvent('MouseEvents');
+				event.initMouseEvent('click', true, false, window, 0, 0, 0, 0,
+						0, false, false, false, false, 0, null);
+				link.dispatchEvent(event);
+			}
+			var filename = deskname + '.png';
+			saveFile(imgdata, filename);
+		}
+	</script>
+</body>
+</html>
